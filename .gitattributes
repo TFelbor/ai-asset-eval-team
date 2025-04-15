@@ -1,0 +1,33 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Python files
+*.py text diff=python
+
+# Shell scripts should use LF
+*.sh text eol=lf
+
+# Streamlit config files
+*.toml text
+
+# Jupyter notebooks
+*.ipynb text
+
+# Documentation
+*.md text
+LICENSE text
+
+# Data files
+*.csv text
+*.json text
+*.yaml text
+*.yml text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.db binary
+*.sqlite binary

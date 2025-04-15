@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Finance Dashboard - Loading</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5; /* Indigo */
+            --primary-light: #818cf8; /* Light indigo */
+            --primary-dark: #3730a3; /* Dark indigo */
+            --bg-dark: #1f2937; /* Dark gray/blue - main background */
+            --text-primary: #f9fafb; /* Almost white - primary text */
+            --text-secondary: #e5e7eb; /* Light gray - secondary text */
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .loading-spinner:after {
+            content: " ";
+            display: block;
+            border-radius: 50%;
+            width: 0;
+            height: 0;
+            margin: 8px;
+            box-sizing: border-box;
+            border: 32px solid var(--primary-color);
+            border-color: var(--primary-color) transparent var(--primary-color) transparent;
+            animation: loading-spinner 1.2s infinite;
+        }
+
+        @keyframes loading-spinner {
+            0% {
+                transform: rotate(0);
+                animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+            }
+            50% {
+                transform: rotate(180deg);
+                animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+            }
+            
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            }
+            
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            }
+        }
+
+        .status {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .retry-button {
+            display: none;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .retry-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Finance Dashboard</h1>
+        <div class="loading-spinner"></div>
+        <p>Starting the server... Please wait.</p>
+        <p class="status">This may take a few moments. The dashboard will automatically open when ready.</p>
+        <div id="timer">0s</div>
+        <button id="retry-button" class="retry-button" onclick="window.location.reload()">Retry Connection</button>
+    </div>
+
+    <script>
+        // Start a timer to show how long the user has been waiting
+        let seconds = 0;
+        const timerElement = document.getElementById('timer');
+        const retryButton = document.getElementById('retry-button');
+        const statusElement = document.querySelector('.status');
+        
+        // Update timer every second
+        const timerInterval = setInterval(() => {
+            seconds++;
+            timerElement.textContent = seconds + 's';
+            
+            // After 30 seconds, show retry button
+            if (seconds >= 30) {
+                retryButton.style.display = 'inline-block';
+                statusElement.textContent = 'The server is taking longer than expected. You can try refreshing the page.';
+                statusElement.style.color = '#f59e0b'; // Warning color
+            }
+            
+            // Check if Streamlit is loaded
+            checkServerStatus();
+        }, 1000);
+        
+        // Function to check if the Streamlit server is ready
+        function checkServerStatus() {
+            fetch(window.location.href, {
+                method: 'HEAD',
+                cache: 'no-store'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If we get a successful response, check if it's the Streamlit app
+                    fetch(window.location.href)
+                        .then(response => response.text())
+                        .then(html => {
+                            if (html.includes('streamlit-root')) {
+                                // Streamlit is loaded, redirect
+                                clearInterval(timerInterval);
+                                window.location.reload();
+                            }
+                        })
+                        .catch(err => console.error('Error checking Streamlit content:', err));
+                }
+            })
+            .catch(err => {
+                console.log('Server not ready yet:', err);
+                // After 60 seconds of failed attempts, show error
+                if (seconds >= 60) {
+                    statusElement.textContent = 'Unable to connect to the server. Please check if the server is running or try again later.';
+                    statusElement.style.color = '#ef4444'; // Error color
+                    clearInterval(timerInterval);
+                }
+            });
+        }
+
+        // Initial check
+        setTimeout(checkServerStatus, 1000);
+    </script>
+</body>
+</html>

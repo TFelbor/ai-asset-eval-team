@@ -1,0 +1,63 @@
+{% macro analysis_card(title, report, insights, charts, news=None, advanced=None, asset_type=None, symbol=None) %}
+<div class="analysis-card">
+    <div class="card-header">
+        <h2>{{ title }}</h2>
+    </div>
+    
+    <div class="card-body">
+        <div class="report-section">
+            <h3>Analysis Report</h3>
+            <div class="report-content">
+                {% for key, value in report.items() %}
+                    {% if key != 'raw' and not value is mapping %}
+                        <div class="report-item">
+                            <span class="report-label">{{ key|replace('_', ' ')|title }}:</span>
+                            <span class="report-value">{{ value }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="insights-section">
+            <h3>Key Insights</h3>
+            <ul class="insights-list">
+                {% for insight in insights %}
+                    <li>{{ insight }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        {% if charts and charts|length > 0 %}
+            <div class="chart-links">
+                <h3>Interactive Charts</h3>
+                <div class="button-group">
+                    {% for chart in charts %}
+                        <button class="button chart-button" 
+                                data-asset-type="{{ asset_type }}" 
+                                data-symbol="{{ symbol }}" 
+                                data-chart-type="{{ chart.type }}" 
+                                data-url="{{ chart.url }}">
+                            {{ chart.title }}
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if news %}
+            <div class="news-section">
+                <h3>Latest News</h3>
+                <a href="{{ news.url }}" class="button">{{ news.title }}</a>
+            </div>
+        {% endif %}
+        
+        {% if advanced %}
+            <div class="advanced-section">
+                <h3>Advanced Analytics</h3>
+                <a href="{{ advanced.url }}" class="button">{{ advanced.title }}</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

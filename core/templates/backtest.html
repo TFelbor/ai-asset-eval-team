@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ title }} - Financial Analysis Dashboard</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+        }
+        
+        .backtest-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 992px) {
+            .backtest-container {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .chart-container {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .chart-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+        
+        .metrics-container {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .strategy-info {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .strategy-name {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .strategy-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .strategy-params {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .param-badge {
+            background-color: var(--bg-input);
+            color: var(--text-secondary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .metrics-section {
+            margin-bottom: 20px;
+        }
+        
+        .metrics-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .metrics-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .metrics-list li {
+            padding: 8px 10px;
+            border-left: 3px solid var(--primary-color);
+            background-color: var(--bg-input);
+            margin-bottom: 8px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+        
+        .trades-section {
+            margin-top: 30px;
+        }
+        
+        .trades-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .trades-list {
+            list-style-type: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .trades-list li {
+            padding: 8px 10px;
+            border-left: 3px solid;
+            margin-bottom: 8px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            background-color: var(--bg-input);
+        }
+        
+        .trades-list li.buy {
+            border-left-color: var(--success-color);
+        }
+        
+        .trades-list li.sell {
+            border-left-color: var(--danger-color);
+        }
+        
+        .backtest-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .backtest-actions a {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+        
+        .backtest-actions a:hover {
+            background-color: var(--info-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .backtest-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container, .metrics-container {
+                padding: 15px;
+            }
+            
+            .strategy-name {
+                font-size: 1.3rem;
+            }
+            
+            .param-badge {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+        <nav>
+            <a href="/" class="nav-link">Home</a>
+            <a href="/analyze/stock/{{ ticker }}" class="nav-link">Analysis</a>
+            <a href="javascript:history.back()" class="nav-link">Back</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="backtest-container">
+                <div class="chart-container">
+                    <h2>Backtest Results</h2>
+                    <img src="data:image/png;base64,{{ chart_image }}" alt="Backtest Chart" class="chart-image">
+                </div>
+                
+                <div class="metrics-container">
+                    <div class="strategy-info">
+                        <div class="strategy-name">{{ strategy }} Strategy</div>
+                        <div class="strategy-description">{{ strategy_description }}</div>
+                        <div class="strategy-params">
+                            {% for param in strategy_params %}
+                            <span class="param-badge">{{ param }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-section">
+                        <h3>Performance Metrics</h3>
+                        <ul class="metrics-list">
+                            {% for metric in performance_metrics %}
+                            <li>{{ metric }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="metrics-section">
+                        <h3>Benchmark (Buy & Hold)</h3>
+                        <ul class="metrics-list">
+                            {% for metric in benchmark_metrics %}
+                            <li>{{ metric }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="trades-section">
+                        <h3>Trades ({{ trade_count }} total)</h3>
+                        <ul class="trades-list">
+                            {% for trade in trade_details %}
+                            <li class="{{ 'buy' if 'Buy' in trade else 'sell' }}">{{ trade }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="backtest-actions">
+                        <a href="/backtest/view/{{ ticker }}?strategy=ma_cross&period={{ period }}">Try MA Cross</a>
+                        <a href="/backtest/view/{{ ticker }}?strategy=rsi&period={{ period }}">Try RSI</a>
+                        <a href="/backtest/view/{{ ticker }}?strategy=macd&period={{ period }}">Try MACD</a>
+                        <a href="/advanced/stock/{{ ticker }}">Advanced Analytics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Financial Analysis Dashboard. Powered by AI Agents.</p>
+    </footer>
+</body>
+</html>

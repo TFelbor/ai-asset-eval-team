@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- No CSP meta tag here - we'll handle it server-side -->
+    <title>Financial Analysis Dashboard</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="/static/js/components/chart-tabs.js"></script>
+    <script src="/static/js/social.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Financial Analysis Dashboard</h1>
+        <p>AI-powered analysis of stocks, cryptocurrencies, REITs, and ETFs</p>
+
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="stock-tab">Stocks</div>
+            <div class="tab" data-tab="crypto-tab">Cryptocurrencies</div>
+            <div class="tab" data-tab="reit-tab">REITs</div>
+            <div class="tab" data-tab="etf-tab">ETFs</div>
+            <div class="tab" data-tab="compare-tab">Compare</div>
+        </div>
+
+        <!-- Stock Analysis Tab -->
+        <div id="stock-tab" class="tab-content active">
+            <div class="card">
+                <h2>Stock Analysis</h2>
+                <p>Enter a stock ticker symbol to analyze its fundamentals, valuation, and market sentiment.</p>
+                <form id="stock-form">
+                    <div class="form-group">
+                        <label for="stock-ticker">Stock Ticker Symbol:</label>
+                        <input type="text" id="stock-ticker" placeholder="e.g., AAPL, MSFT, GOOGL" required>
+                    </div>
+                    <button type="submit">Analyze Stock</button>
+                </form>
+            </div>
+            <div id="stock-results"></div>
+        </div>
+
+        <!-- Cryptocurrency Analysis Tab -->
+        <div id="crypto-tab" class="tab-content">
+            <div class="card">
+                <h2>Cryptocurrency Analysis</h2>
+                <p>Enter a cryptocurrency ID to analyze its market metrics, volatility, and on-chain data.</p>
+                <form id="crypto-form">
+                    <div class="form-group">
+                        <label for="crypto-id">Cryptocurrency ID:</label>
+                        <input type="text" id="crypto-id" placeholder="e.g., bitcoin, ethereum, solana" required>
+                    </div>
+                    <button type="submit">Analyze Cryptocurrency</button>
+                </form>
+            </div>
+            <div id="crypto-results"></div>
+        </div>
+
+        <!-- REIT Analysis Tab -->
+        <div id="reit-tab" class="tab-content">
+            <div class="card">
+                <h2>REIT Analysis</h2>
+                <p>Enter a REIT ticker symbol to analyze its property portfolio, dividend yield, and debt levels.</p>
+                <form id="reit-form">
+                    <div class="form-group">
+                        <label for="reit-ticker">REIT Ticker Symbol:</label>
+                        <input type="text" id="reit-ticker" placeholder="e.g., O, SPG, PLD" required>
+                    </div>
+                    <button type="submit">Analyze REIT</button>
+                </form>
+            </div>
+            <div id="reit-results"></div>
+        </div>
+
+        <!-- ETF Analysis Tab -->
+        <div id="etf-tab" class="tab-content">
+            <div class="card">
+                <h2>ETF Analysis</h2>
+                <p>Enter an ETF ticker symbol to analyze its holdings, expense ratio, and historical performance.</p>
+                <form id="etf-form">
+                    <div class="form-group">
+                        <label for="etf-ticker">ETF Ticker Symbol:</label>
+                        <input type="text" id="etf-ticker" placeholder="e.g., SPY, QQQ, VTI" required>
+                    </div>
+                    <button type="submit">Analyze ETF</button>
+                </form>
+            </div>
+            <div id="etf-results"></div>
+        </div>
+
+        <!-- Compare Securities Tab -->
+        <div id="compare-tab" class="tab-content">
+            <div class="card">
+                <h2>Compare Securities</h2>
+                <p>Enter ticker symbols for different securities to compare their performance and recommendations.</p>
+                <form id="compare-form">
+                    <div class="form-group">
+                        <label for="compare-stock">Stock Ticker (optional):</label>
+                        <input type="text" id="compare-stock" placeholder="e.g., AAPL">
+                    </div>
+                    <div class="form-group">
+                        <label for="compare-crypto">Cryptocurrency ID (optional):</label>
+                        <input type="text" id="compare-crypto" placeholder="e.g., bitcoin">
+                    </div>
+                    <div class="form-group">
+                        <label for="compare-reit">REIT Ticker (optional):</label>
+                        <input type="text" id="compare-reit" placeholder="e.g., O">
+                    </div>
+                    <div class="form-group">
+                        <label for="compare-etf">ETF Ticker (optional):</label>
+                        <input type="text" id="compare-etf" placeholder="e.g., SPY">
+                    </div>
+                    <button type="submit">Compare Securities</button>
+                </form>
+            </div>
+            <div id="compare-results"></div>
+        </div>
+    </div>
+
+
+
+    <!-- Chart tabs container -->
+    <div id="chart-tabs-container" class="chart-tabs-container"></div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

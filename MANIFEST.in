@@ -1,0 +1,11 @@
+include LICENSE
+include README.md
+include requirements.txt
+recursive-include static *
+recursive-include templates *
+recursive-include data *.csv
+recursive-exclude data/cache *
+recursive-exclude data/temp *
+recursive-exclude logs *
+recursive-exclude __pycache__ *
+recursive-exclude .venv *

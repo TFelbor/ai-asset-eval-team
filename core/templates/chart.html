@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Financial Analysis Dashboard{% endblock %}
+
+{% block head_scripts %}
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="/static/js/social.js"></script>
+    <script src="/static/js/chart-utils.js"></script>
+    <style>
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 600px;
+            margin: 20px 0;
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .chart-description {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .data-source {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .insights {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .insights h2 {
+            color: var(--text-primary);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .insights ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .insights li {
+            padding: 12px;
+            border-left: 4px solid var(--primary-color);
+            background-color: var(--bg-input);
+            margin-bottom: 12px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .insights li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background-color: var(--bg-card);
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
+            header {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 1.2rem;
+                margin: 0 0 10px 0;
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .nav-link {
+                padding: 5px 10px;
+                font-size: 0.9rem;
+            }
+
+            .chart-container {
+                height: 400px;
+                padding: 10px;
+                margin: 10px 0;
+            }
+
+            .chart-title {
+                font-size: 1.2rem;
+            }
+
+            .insights {
+                padding: 10px;
+            }
+
+            .insights h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <nav>
+        <a href="/" class="nav-link">Home</a>
+        <a href="/analyze/{{ asset_type }}/{{ ticker }}" class="nav-link">Analysis</a>
+        <a href="javascript:history.back()" class="nav-link">Back</a>
+    </nav>
+
+    <div class="chart-container">
+        <div class="chart-title">{{ chart_title }}</div>
+        <div class="chart-description">{{ chart_description }}</div>
+        <div id="chart"></div>
+        <div class="data-source">Data source: {{ data_source }}</div>
+    </div>
+
+    <div class="insights">
+        <h2>Key Insights</h2>
+        <ul>
+            {% for insight in insights %}
+            <li>{{ insight }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="social-share-container" class="social-sharing-container"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Parse the chart data from the server
+    const chartData = {{ chart_json|safe }};
+
+    // Initialize the chart using ChartUtils
+    ChartUtils.initChart('chart', chartData, function(data) {
+        // Custom click handler for this chart
+        const point = data.points[0];
+        console.log('Clicked point:', point);
+
+        // You can add custom behavior here based on the clicked point
+        // For example, highlight the point or show additional information
+    }).then(() => {
+        console.log('Chart initialized successfully');
+    }).catch(error => {
+        console.error('Error initializing chart:', error);
+    });
+
+    // Initialize social sharing
+    if (window.socialSharing) {
+        window.socialSharing.createSharingWidget('social-share-container', {
+            url: window.location.href,
+            title: '{{ title }}',
+            description: '{{ chart_description }}',
+            platforms: ['twitter', 'facebook', 'linkedin', 'email'],
+            showCopy: true,
+            showDownload: true,
+            downloadElementId: 'chart',
+            downloadFilename: '{{ ticker }}-chart.png'
+        });
+    }
+</script>
+{% endblock %}

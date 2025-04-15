@@ -1,0 +1,30 @@
+[theme]
+primaryColor = "#4f46e5"  # Vibrant blue/purple
+backgroundColor = "#1e1e1e"  # Dark grey background
+secondaryBackgroundColor = "#2d2d2d"  # Slightly lighter grey for cards
+textColor = "#ffffff"  # White text
+font = "sans serif"
+
+# Note: Custom accent colors should be defined in the dashboard.py CSS, not here
+# Streamlit only supports the above theme options
+
+[server]
+port = 8501
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 200
+maxMessageSize = 200
+headless = true  # Disable auto-opening browser to prevent duplicate tabs
+enableStaticServing = true  # Enable serving static files
+
+[browser]
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 8501
+
+[logger]
+level = "info"  # Change to "debug" for more verbose logging
+
+[client]
+toolbarMode = "auto"  # Options: "auto", "developer", "viewer", "minimal"
+showErrorDetails = true  # Show detailed error messages

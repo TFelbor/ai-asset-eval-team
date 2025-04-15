@@ -1,0 +1,21 @@
+ticker,sector,industry,pe_ratio_avg,pb_ratio_avg,growth_rate_avg
+AAPL,Technology,Consumer Electronics,25.5,6.2,0.15
+MSFT,Technology,Software—Infrastructure,30.2,10.5,0.18
+GOOGL,Communication Services,Internet Content & Information,24.8,4.8,0.16
+AMZN,Consumer Cyclical,Internet Retail,60.3,11.2,0.22
+META,Communication Services,Internet Content & Information,22.1,5.3,0.14
+TSLA,Consumer Cyclical,Auto Manufacturers,80.5,12.8,0.35
+NVDA,Technology,Semiconductors,45.2,18.5,0.40
+JPM,Financial Services,Banks—Diversified,12.5,1.8,0.08
+V,Financial Services,Credit Services,32.4,12.6,0.12
+JNJ,Healthcare,Drug Manufacturers—General,18.2,5.1,0.06
+WMT,Consumer Defensive,Discount Stores,22.8,4.2,0.05
+PG,Consumer Defensive,Household & Personal Products,24.5,7.3,0.04
+XOM,Energy,Oil & Gas Integrated,12.1,1.6,0.03
+BAC,Financial Services,Banks—Diversified,11.8,1.2,0.07
+DIS,Communication Services,Entertainment,21.5,2.8,0.09
+NFLX,Communication Services,Entertainment,40.2,8.5,0.25
+INTC,Technology,Semiconductors,15.8,2.1,0.05
+CSCO,Technology,Communication Equipment,16.2,4.5,0.04
+KO,Consumer Defensive,Beverages—Non-Alcoholic,24.3,10.2,0.03
+PEP,Consumer Defensive,Beverages—Non-Alcoholic,25.1,12.5,0.04

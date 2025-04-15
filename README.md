@@ -12,6 +12,7 @@ The AI Finance Dashboard is a Streamlit-based application that provides in-depth
 
 ![alt text](https://github.com/TFelbor/ai-asset-eval-team/blob/main/demos/dashboard_home.gif "Dashboard Home")
 
+
 ### Stock Analysis
 
 ![alt text](https://github.com/TFelbor/ai-asset-eval-team/blob/main/demos/stock_analysis.gif "Stock Analysis")

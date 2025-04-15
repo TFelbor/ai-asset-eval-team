@@ -6,6 +6,14 @@ An AI-powered dashboard for comprehensive analysis of different financial securi
 
 The AI Finance Dashboard is a Streamlit-based application that provides in-depth analysis of various financial assets. It uses specialized AI agents to analyze different aspects of financial securities and combines them into a cohesive analysis. The dashboard features a modern dark-themed UI with vibrant accent colors, interactive charts, and educational content to help users make informed investment decisions.
 
+## Live Demos
+
+### Dashboard Home 
+
+![alt text](https://github.com/TFelbor/ai-asset-eval-team/blob/main/demos/dashboard_home.gif "Dashboard Home")
+
+### Stock Analysis
+
 ## Project Structure
 
 The project has been reorganized and cleaned up for better maintainability and clarity:

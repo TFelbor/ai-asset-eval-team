@@ -1,4 +1,4 @@
-# AI Finance Dashboard
+# A.I. Finance Dashboard
 
 An AI-powered dashboard for comprehensive analysis of different financial securities including stocks, cryptocurrencies, REITs, and ETFs.
 

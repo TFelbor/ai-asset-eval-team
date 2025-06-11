@@ -4,7 +4,17 @@ This module provides a standardized way to interact with the CoinGecko API.
 """
 from typing import Dict, Any, List, Optional, Union
 from core.api.base_client import BaseAPIClient
-from config import settings as config
+# Try to import config, but provide fallbacks if not available
+try:
+    from core.config import settings as config
+except ImportError:
+    try:
+        from config import settings as config
+    except ImportError:
+        # Create fallback config
+        class Config:
+            COINGECKO_API_KEY = None
+        config = Config()
 
 class CoinGeckoClient(BaseAPIClient):
     """CoinGecko API client."""

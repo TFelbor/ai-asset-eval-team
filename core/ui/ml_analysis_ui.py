@@ -215,11 +215,23 @@ def render_ml_analysis_ui(ticker: str, asset_type: str, price_history: Dict[str,
 
     # Lazy import ML components to improve startup performance
     with st.spinner("Loading ML components..."):
-        from core.analytics.ml_predictions import MLPredictor
-        from core.analytics.technical_indicators import TechnicalIndicators
+        try:
+            from core.analytics.ml_predictions import MLPredictor
+            from core.analytics.technical_indicators import TechnicalIndicators
 
-        # Initialize ML predictor only when needed
-        ml_predictor = MLPredictor()
+            # Initialize ML predictor only when needed
+            ml_predictor = MLPredictor()
+        except ImportError as e:
+            if "tensorflow" in str(e).lower():
+                st.error("TensorFlow is not installed. Some ML models (LSTM) will not be available.")
+                st.info("To enable all ML features, install TensorFlow: `pip install tensorflow`")
+                # Still try to import without TensorFlow
+                from core.analytics.ml_predictions import MLPredictor
+                from core.analytics.technical_indicators import TechnicalIndicators
+                ml_predictor = MLPredictor()
+            else:
+                st.error(f"Error loading ML components: {str(e)}")
+                return
 
     # Get data arrays from price history
     timestamps = price_history.get("timestamps", [])
@@ -307,11 +319,11 @@ def render_ml_analysis_ui(ticker: str, asset_type: str, price_history: Dict[str,
 
     # Display data overview
     with st.expander("📊 Data Overview", expanded=False):
-        st.dataframe(df.tail(10), use_container_width=True)
+        st.dataframe(df.tail(10))
 
         # Display basic statistics
         st.markdown("### Basic Statistics")
-        st.dataframe(df.describe(), use_container_width=True)
+        st.dataframe(df.describe())
 
     # ML Analysis Options
     st.markdown("### ML Analysis Options")
@@ -768,7 +780,7 @@ def display_ml_results(
     )
 
     # Display the figure
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig)
 
     # Display forecast with educational content
     st.markdown("### Future Forecast")
@@ -844,7 +856,7 @@ def display_ml_results(
     )
 
     # Display the figure
-    st.plotly_chart(fig_forecast, use_container_width=True)
+    st.plotly_chart(fig_forecast)
 
     # Display feature importance if available with educational content
     if hasattr(ml_predictor, "feature_importance") and ml_predictor.feature_importance:
@@ -891,7 +903,7 @@ def display_ml_results(
         )
 
         # Display the figure
-        st.plotly_chart(fig_importance, use_container_width=True)
+        st.plotly_chart(fig_importance)
 
     # Display residuals analysis with educational content
     st.markdown("### Residuals Analysis")
@@ -963,7 +975,7 @@ def display_ml_results(
     )
 
     # Display the figure
-    st.plotly_chart(fig_residuals, use_container_width=True)
+    st.plotly_chart(fig_residuals)
 
     # Display residuals distribution
     fig_dist = go.Figure()
@@ -987,7 +999,7 @@ def display_ml_results(
     )
 
     # Display the figure
-    st.plotly_chart(fig_dist, use_container_width=True)
+    st.plotly_chart(fig_dist)
 
     # Display model details
     with st.expander("Model Details", expanded=False):
@@ -1006,8 +1018,8 @@ def display_ml_results(
             "Metric": list(metrics.keys()),
             "Value": list(metrics.values())
         })
-        st.dataframe(metrics_df, use_container_width=True)
+        st.dataframe(metrics_df)
 
         # Display feature list
         st.markdown("**Features Used:**")
-        st.dataframe(pd.DataFrame({"Feature": X.columns}), use_container_width=True)
+        st.dataframe(pd.DataFrame({"Feature": X.columns}))

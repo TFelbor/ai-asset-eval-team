@@ -11,10 +11,10 @@ import subprocess
 import threading
 import atexit
 
-# Add the core directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
+# Add the project root to the Python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import enhanced logging
+# Now import from core
 from core.utils.logger import (
     # Basic logging functions
     log_info, log_error, log_success, log_warning, log_debug,
@@ -2748,7 +2748,7 @@ elif analyze_button or (st.session_state.last_analysis is not None and st.sessio
                             # Display image if available
                             image_url = news.get("urlToImage") or news.get("image_url")
                             if image_url:
-                                st.image(image_url, use_container_width=True)
+                                st.image(image_url, width=200)
                             else:
                                 # Display a placeholder
                                 st.markdown("📰")

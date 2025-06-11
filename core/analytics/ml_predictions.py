@@ -13,9 +13,19 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.pipeline import Pipeline
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Dropout
+# Try to import TensorFlow, but make it optional
+try:
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, LSTM, Dropout
+    TENSORFLOW_AVAILABLE = True
+except ImportError:
+    TENSORFLOW_AVAILABLE = False
+    tf = None
+    Sequential = None
+    Dense = None
+    LSTM = None
+    Dropout = None
 from typing import Dict, List, Union, Optional, Tuple, Any
 
 class MLPredictor:
@@ -162,6 +172,9 @@ class MLPredictor:
                 } if tune_hyperparams else {}
 
             elif model_type == 'lstm':
+                # Check if TensorFlow is available
+                if not TENSORFLOW_AVAILABLE:
+                    raise ValueError("TensorFlow is not installed. Please install TensorFlow to use LSTM models: pip install tensorflow")
                 # For LSTM, we need to reshape the data
                 return self._train_lstm_model(X, y, cv_splits)
 
@@ -235,6 +248,9 @@ class MLPredictor:
         Returns:
             Dict of performance metrics
         """
+        if not TENSORFLOW_AVAILABLE:
+            raise ValueError("TensorFlow is not installed. Please install TensorFlow to use LSTM models: pip install tensorflow")
+
         try:
             # Scale features and target
             X_scaled = self.scaler_X.fit_transform(X)
@@ -348,7 +364,7 @@ class MLPredictor:
                     'upper_bound': upper_bound
                 }
 
-            elif isinstance(self.model, Sequential):  # LSTM model
+            elif TENSORFLOW_AVAILABLE and Sequential is not None and isinstance(self.model, Sequential):  # LSTM model
                 # Reshape data for LSTM [samples, time steps, features]
                 X_reshaped = X_scaled.reshape((X_scaled.shape[0], 1, X_scaled.shape[1]))
 

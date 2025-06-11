@@ -3,7 +3,7 @@ Base analysis team for all asset types.
 This module provides a standardized way to analyze different asset types.
 """
 from typing import Dict, Any
-from data.data_service import DataService
+from core.data.data_service import DataService
 
 class BaseAnalysisTeam:
     """Base class for all analysis teams."""

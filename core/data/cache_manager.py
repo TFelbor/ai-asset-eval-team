@@ -8,7 +8,22 @@ import json
 import hashlib
 import threading
 from typing import Any, Dict, Optional, Set
-from config.settings import CACHE_DIR, CACHE_EXPIRY
+# Try to import config, but provide fallbacks if not available
+try:
+    from core.config.settings import CACHE_DIR, CACHE_EXPIRY
+except ImportError:
+    try:
+        from config.settings import CACHE_DIR, CACHE_EXPIRY
+    except ImportError:
+        # Create fallback config
+        from pathlib import Path
+        CACHE_DIR = Path("core/data/cache")
+        CACHE_EXPIRY = {
+            "stock": 3600,  # 1 hour
+            "crypto": 1800,  # 30 minutes
+            "macro": 7200,  # 2 hours
+            "news": 1800,   # 30 minutes
+        }
 from core.utils.logger import cache_logger, log_cache_operation
 
 class CacheManager:

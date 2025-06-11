@@ -11,7 +11,19 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, Dict, Optional, Callable
 
-import config
+# Try to import config, but provide fallbacks if not available
+try:
+    from core.config import settings as config
+except ImportError:
+    try:
+        import config
+    except ImportError:
+        # Create a minimal config fallback
+        class Config:
+            LOG_DIR = Path("core/logs")
+            LOG_LEVEL = "INFO"
+            LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        config = Config()
 
 # Try to import loguru, but provide fallbacks if not available
 try:

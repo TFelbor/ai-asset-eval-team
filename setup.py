@@ -12,7 +12,7 @@ setup(
         "numpy>=1.26.0",
         "plotly>=5.17.0",
         "yfinance>=0.2.31",
-        "pycoingecko>=3.3.0",
+        "pycoingecko>=3.2.0",
         "requests>=2.31.0",
         "matplotlib>=3.8.0",
         "scikit-learn>=1.3.1",
@@ -22,6 +22,7 @@ setup(
 
         # Optional dependencies for advanced features
         # Uncomment as needed
+        # "tensorflow>=2.12.0",  # For LSTM models in ML analysis
         # "backtrader>=1.9.78",
         # "PyPortfolioOpt>=1.5.5",
         # "empyrical>=0.5.5",

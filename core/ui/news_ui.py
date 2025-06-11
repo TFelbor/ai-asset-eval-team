@@ -227,7 +227,7 @@ def display_news_articles(articles):
                 # Display image if available
                 image_url = article.get("urlToImage") or article.get("image_url")
                 if image_url:
-                    st.image(image_url, use_container_width=True)
+                    st.image(image_url, width=200)
                 else:
                     # Display a placeholder
                     st.markdown("📰")
